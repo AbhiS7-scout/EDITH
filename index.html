@@ -334,6 +334,45 @@
         </footer>
 
     </div>
+<script>
+    const listenButton = document.querySelector(".listen-button");
+    const greeting = document.querySelector(".greeting p");
 
+    const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+
+        recognition.lang = "en-US";
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        listenButton.addEventListener("click", () => {
+            greeting.textContent = "LISTENING...";
+            listenButton.textContent = "LISTENING";
+            recognition.start();
+        });
+
+        recognition.onresult = (event) => {
+            const text = event.results[0][0].transcript;
+
+            greeting.textContent = text;
+            listenButton.textContent = "LISTEN";
+        };
+
+        recognition.onerror = () => {
+            greeting.textContent = "VOICE INPUT FAILED";
+            listenButton.textContent = "LISTEN";
+        };
+
+        recognition.onend = () => {
+            listenButton.textContent = "LISTEN";
+        };
+
+    } else {
+        greeting.textContent = "VOICE INPUT NOT SUPPORTED";
+    }
+</script>
 </body>
 </html>

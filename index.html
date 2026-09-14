@@ -1,10 +1,339 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EDITH</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 50% 45%, #10263b 0%, #06111d 35%, #02070d 75%);
+            color: #dff8ff;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Background grid */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(80, 200, 255, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(80, 200, 255, 0.035) 1px, transparent 1px);
+            background-size: 35px 35px;
+            mask-image: linear-gradient(to bottom, transparent, black 25%, black 75%, transparent);
+            pointer-events: none;
+        }
+
+        .app {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 28px 20px;
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            max-width: 700px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeDown 1s ease;
+        }
+
+        .brand {
+            letter-spacing: 7px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            letter-spacing: 2px;
+            opacity: 0.7;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #67e8ff;
+            box-shadow: 0 0 12px #67e8ff;
+            animation: blink 2s infinite;
+        }
+
+        /* Main */
+        .main {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .greeting {
+            text-align: center;
+            margin-bottom: 42px;
+            animation: fadeUp 1s ease;
+        }
+
+        .greeting h1 {
+            font-size: clamp(28px, 8vw, 52px);
+            letter-spacing: 4px;
+            font-weight: 300;
+        }
+
+        .greeting p {
+            margin-top: 10px;
+            font-size: 12px;
+            letter-spacing: 3px;
+            opacity: 0.5;
+        }
+
+        /* EDITH Core */
+        .core-container {
+            position: relative;
+            width: 230px;
+            height: 230px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 48px;
+        }
+
+        .core {
+            width: 105px;
+            height: 105px;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle,
+                    #e8fbff 0%,
+                    #73e8ff 15%,
+                    #238fb8 38%,
+                    #092b40 68%,
+                    transparent 72%);
+            box-shadow:
+                0 0 25px #55dfff,
+                0 0 60px rgba(50, 210, 255, 0.55),
+                0 0 110px rgba(30, 170, 255, 0.25);
+            animation: breathe 3s ease-in-out infinite;
+            z-index: 3;
+        }
+
+        .ring {
+            position: absolute;
+            border: 1px solid rgba(100, 225, 255, 0.45);
+            border-radius: 50%;
+        }
+
+        .ring.one {
+            width: 145px;
+            height: 145px;
+            animation: spin 8s linear infinite;
+        }
+
+        .ring.two {
+            width: 190px;
+            height: 190px;
+            border-style: dashed;
+            animation: spinReverse 13s linear infinite;
+        }
+
+        .ring.three {
+            width: 225px;
+            height: 225px;
+            border-color: rgba(100, 225, 255, 0.15);
+            animation: pulseRing 3s ease-in-out infinite;
+        }
+
+        /* Decorative orbit dots */
+        .orbit-dot {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #8cefff;
+            box-shadow: 0 0 12px #5ce5ff;
+        }
+
+        .dot-a {
+            top: 12px;
+            left: 70px;
+        }
+
+        .dot-b {
+            right: 8px;
+            top: 105px;
+        }
+
+        .dot-c {
+            bottom: 18px;
+            left: 52px;
+        }
+
+        /* Button */
+        .listen-button {
+            width: 82px;
+            height: 82px;
+            border: 1px solid rgba(120, 230, 255, 0.5);
+            border-radius: 50%;
+            background: rgba(20, 70, 95, 0.3);
+            color: #c9f7ff;
+            font-size: 10px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            box-shadow: 0 0 25px rgba(60, 210, 255, 0.12);
+            transition: 0.3s ease;
+        }
+
+        .listen-button:hover {
+            transform: scale(1.07);
+            box-shadow:
+                0 0 30px rgba(60, 210, 255, 0.35),
+                inset 0 0 20px rgba(60, 210, 255, 0.1);
+        }
+
+        .listen-button:active {
+            transform: scale(0.94);
+        }
+
+        /* Footer */
+        .footer {
+            font-size: 9px;
+            letter-spacing: 2px;
+            opacity: 0.25;
+            padding-top: 20px;
+        }
+
+        /* Animations */
+        @keyframes breathe {
+            0%, 100% {
+                transform: scale(0.92);
+            }
+            50% {
+                transform: scale(1.08);
+            }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes spinReverse {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+
+        @keyframes pulseRing {
+            0%, 100% {
+                transform: scale(0.94);
+                opacity: 0.35;
+            }
+            50% {
+                transform: scale(1.04);
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.25; }
+        }
+
+        @keyframes fadeDown {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 400px) {
+            .app {
+                padding: 22px 16px;
+            }
+
+            .core-container {
+                transform: scale(0.9);
+                margin-bottom: 32px;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <h1>EDITH</h1>
-    <p>Your AI assistant is coming soon.</p>
+
+    <div class="app">
+
+        <header class="header">
+            <div class="brand">EDITH</div>
+
+            <div class="status">
+                <span class="status-dot"></span>
+                ONLINE
+            </div>
+        </header>
+
+        <main class="main">
+
+            <div class="greeting">
+                <h1>Good evening.</h1>
+                <p>HOW CAN I ASSIST YOU?</p>
+            </div>
+
+            <div class="core-container">
+                <div class="ring one"></div>
+                <div class="ring two"></div>
+                <div class="ring three"></div>
+
+                <div class="orbit-dot dot-a"></div>
+                <div class="orbit-dot dot-b"></div>
+                <div class="orbit-dot dot-c"></div>
+
+                <div class="core"></div>
+            </div>
+
+            <button class="listen-button">
+                LISTEN
+            </button>
+
+        </main>
+
+        <footer class="footer">
+            EDITH • PERSONAL AI SYSTEM
+        </footer>
+
+    </div>
+
 </body>
 </html>

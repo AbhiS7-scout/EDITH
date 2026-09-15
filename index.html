@@ -399,7 +399,7 @@
 
                 } else {
 
-                    greeting.textContent = "EDITH ERROR";
+                    greeting.textContent = data.error || "EDITH ERROR";
                     listenButton.textContent = "LISTEN";
                     console.log(data.error);
 

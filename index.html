@@ -368,6 +368,27 @@
 
             const text = event.results[0][0].transcript;
 
+if (text.toLowerCase().includes("time")) {
+    const now = new Date();
+    const time = now.toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit"
+    });
+
+    greeting.textContent = "The time is " + time;
+    listenButton.textContent = "LISTEN";
+
+    const speech = new SpeechSynthesisUtterance(
+        "The time is " + time
+    );
+
+    speech.lang = "en-US";
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(speech);
+
+    return;
+}
+
             greeting.textContent = "THINKING...";
             listenButton.textContent = "THINKING";
 

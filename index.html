@@ -368,6 +368,37 @@
 
             const text = event.results[0][0].transcript;
 
+
+
+
+
+
+if (
+    text.toLowerCase().includes("date") ||
+    text.toLowerCase().includes("day is it") ||
+    text.toLowerCase().includes("what day")
+) {
+    const now = new Date();
+
+    const reply = "Today is " + now.toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric"
+    });
+
+    greeting.textContent = reply;
+    listenButton.textContent = "LISTEN";
+
+    const speech = new SpeechSynthesisUtterance(reply);
+    speech.lang = "en-US";
+
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(speech);
+
+    return;
+}
+
+
 if (
     text.toLowerCase().includes("weather") ||
     text.toLowerCase().includes("temperature")

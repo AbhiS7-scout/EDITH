@@ -372,107 +372,11 @@ const command = text.toLowerCase().trim();
 
 
 
-if (
-    text.toLowerCase().includes("date") ||
-    text.toLowerCase().includes("day is it") ||
-    text.toLowerCase().includes("what day")
-) {
-    const now = new Date();
-
-    const reply = "Today is " + now.toLocaleDateString("en-US", {
-        weekday: "long",
-        month: "long",
-        day: "numeric"
-    });
-
-    greeting.textContent = reply;
-    listenButton.textContent = "LISTEN";
-
-    const speech = new SpeechSynthesisUtterance(reply);
-    speech.lang = "en-US";
-
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(speech);
-
-    return;
-}
 
 
-if (
-    text.toLowerCase().includes("weather") ||
-    text.toLowerCase().includes("temperature")
-) {
-    greeting.textContent = "CHECKING WEATHER...";
-    listenButton.textContent = "THINKING";
-
-    try {
-        const response = await fetch(
-            "https://api.open-meteo.com/v1/forecast?latitude=26.8467&longitude=80.9462&current=temperature_2m,weather_code"
-        );
-
-        const data = await response.json();
-
-        const temperature = data.current.temperature_2m;
-        const reply = "The current temperature is " + temperature + " degrees Celsius.";
-
-        greeting.textContent = reply;
-        listenButton.textContent = "LISTEN";
-
-        const speech = new SpeechSynthesisUtterance(reply);
-        speech.lang = "en-US";
-
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(speech);
-
-    } catch (error) {
-        greeting.textContent = "WEATHER ERROR";
-        listenButton.textContent = "LISTEN";
-        console.log(error);
-    }
-
-    return;
-}
 
 
-if (
-    text.toLowerCase().includes("hello") ||
-    text.toLowerCase().includes("hi edith") ||
-    text.toLowerCase().includes("hey edith")
-) {
-    const reply = "Hello. I'm EDITH. How can I help you?";
 
-    greeting.textContent = reply;
-    listenButton.textContent = "LISTEN";
-
-    const speech = new SpeechSynthesisUtterance(reply);
-    speech.lang = "en-US";
-
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(speech);
-
-    return;
-}
-
-if (text.toLowerCase().includes("time")) {
-    const now = new Date();
-    const time = now.toLocaleTimeString([], {
-        hour: "numeric",
-        minute: "2-digit"
-    });
-
-    greeting.textContent = "The time is " + time;
-    listenButton.textContent = "LISTEN";
-
-    const speech = new SpeechSynthesisUtterance(
-        "The time is " + time
-    );
-
-    speech.lang = "en-US";
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(speech);
-
-    return;
-}
 
             greeting.textContent = "THINKING...";
             listenButton.textContent = "THINKING";

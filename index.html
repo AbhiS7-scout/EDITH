@@ -368,6 +368,25 @@
 
             const text = event.results[0][0].transcript;
 
+if (
+    text.toLowerCase().includes("hello") ||
+    text.toLowerCase().includes("hi edith") ||
+    text.toLowerCase().includes("hey edith")
+) {
+    const reply = "Hello. I'm EDITH. How can I help you?";
+
+    greeting.textContent = reply;
+    listenButton.textContent = "LISTEN";
+
+    const speech = new SpeechSynthesisUtterance(reply);
+    speech.lang = "en-US";
+
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(speech);
+
+    return;
+}
+
 if (text.toLowerCase().includes("time")) {
     const now = new Date();
     const time = now.toLocaleTimeString([], {

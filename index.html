@@ -338,10 +338,14 @@
     const listenButton = document.querySelector(".listen-button");
     const greeting = document.querySelector(".greeting p");
 
+    const BACKEND_URL =
+        "https://script.google.com/macros/s/AKfycbweIO7Yd7C5CDaym0vZYTY230AyH2HYlbr60Cl_ibl2GjYu8RcW9hjwtBnTDFHZwPWCeQ/exec";
+
     const SpeechRecognition =
         window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (SpeechRecognition) {
+
         const recognition = new SpeechRecognition();
 
         recognition.lang = "en-US";
@@ -351,14 +355,63 @@
         listenButton.addEventListener("click", () => {
             greeting.textContent = "LISTENING...";
             listenButton.textContent = "LISTENING";
-            recognition.start();
+
+            try {
+                recognition.start();
+            } catch (error) {
+                console.log(error);
+            }
         });
 
-        recognition.onresult = (event) => {
+        recognition.onresult = async (event) => {
+
             const text = event.results[0][0].transcript;
 
-            greeting.textContent = text;
-            listenButton.textContent = "LISTEN";
+            greeting.textContent = "THINKING...";
+            listenButton.textContent = "THINKING";
+
+            try {
+
+                const response = await fetch(BACKEND_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "text/plain;charset=utf-8"
+                    },
+                    body: JSON.stringify({
+                        text: text
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+
+                    greeting.textContent = data.reply;
+                    listenButton.textContent = "LISTEN";
+
+                    const speech = new SpeechSynthesisUtterance(data.reply);
+                    speech.lang = "en-US";
+                    speech.rate = 1;
+                    speech.pitch = 1;
+
+                    window.speechSynthesis.cancel();
+                    window.speechSynthesis.speak(speech);
+
+                } else {
+
+                    greeting.textContent = "EDITH ERROR";
+                    listenButton.textContent = "LISTEN";
+                    console.log(data.error);
+
+                }
+
+            } catch (error) {
+
+                greeting.textContent = "CONNECTION ERROR";
+                listenButton.textContent = "LISTEN";
+                console.log(error);
+
+            }
         };
 
         recognition.onerror = () => {
@@ -367,11 +420,15 @@
         };
 
         recognition.onend = () => {
-            listenButton.textContent = "LISTEN";
+            if (listenButton.textContent === "LISTENING") {
+                listenButton.textContent = "LISTEN";
+            }
         };
 
     } else {
+
         greeting.textContent = "VOICE INPUT NOT SUPPORTED";
+
     }
 </script>
 </body>

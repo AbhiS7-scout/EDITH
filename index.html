@@ -373,6 +373,52 @@
 
 
 
+
+
+
+
+
+
+
+if (
+    text.toLowerCase().includes("calculate") ||
+    text.toLowerCase().includes("what is")
+) {
+    const expression = text
+        .toLowerCase()
+        .replace("calculate", "")
+        .replace("what is", "")
+        .replace(/plus/g, "+")
+        .replace(/minus/g, "-")
+        .replace(/times/g, "*")
+        .replace(/multiplied by/g, "*")
+        .replace(/divided by/g, "/")
+        .replace(/x/g, "*")
+        .trim();
+
+    try {
+        const result = Function('"use strict"; return (' + expression + ')')();
+
+        const reply = "The answer is " + result;
+
+        greeting.textContent = reply;
+        listenButton.textContent = "LISTEN";
+
+        const speech = new SpeechSynthesisUtterance(reply);
+        speech.lang = "en-US";
+
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(speech);
+
+    } catch (error) {
+        greeting.textContent = "I couldn't calculate that.";
+        listenButton.textContent = "LISTEN";
+    }
+
+    return;
+}
+
+
 if (
     text.toLowerCase().includes("date") ||
     text.toLowerCase().includes("day is it") ||

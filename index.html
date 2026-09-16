@@ -1,450 +1,1133 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#05070d"
+    >
+
     <title>EDITH</title>
 
+
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
+
+        :root {
+
+            --red: #e21b2d;
+            --red-bright: #ff3348;
+
+            --blue: #0756a8;
+            --blue-bright: #168cff;
+
+            --gold: #d9a62e;
+            --gold-bright: #ffd866;
+
+            --cyan: #bdf7ff;
+
+            --black: #03050a;
+            --steel: #111722;
+
+        }
+
+
         body {
+
             min-height: 100vh;
             overflow: hidden;
+
+            color: #ffffff;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
             background:
-                radial-gradient(circle at 50% 45%, #10263b 0%, #06111d 35%, #02070d 75%);
-            color: #dff8ff;
-            font-family: Arial, sans-serif;
+
+                radial-gradient(
+                    circle at 50% 45%,
+                    rgba(12, 67, 125, 0.30),
+                    transparent 28%
+                ),
+
+                radial-gradient(
+                    circle at 50% 48%,
+                    rgba(210, 22, 44, 0.12),
+                    transparent 45%
+                ),
+
+                linear-gradient(
+                    145deg,
+                    #020307,
+                    #07101d 45%,
+                    #03050a
+                );
+
         }
 
-        /* Background grid */
+
+        /* ==========================================
+           FUTURISTIC BACKGROUND
+        ========================================== */
+
         body::before {
+
             content: "";
+
             position: fixed;
+
             inset: 0;
-            background-image:
-                linear-gradient(rgba(80, 200, 255, 0.035) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(80, 200, 255, 0.035) 1px, transparent 1px);
-            background-size: 35px 35px;
-            mask-image: linear-gradient(to bottom, transparent, black 25%, black 75%, transparent);
+
             pointer-events: none;
+
+            background-image:
+
+                linear-gradient(
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px
+                );
+
+            background-size: 32px 32px;
+
+            mask-image:
+                linear-gradient(
+                    to bottom,
+                    transparent,
+                    black 18%,
+                    black 82%,
+                    transparent
+                );
+
         }
+
+
+        /* ==========================================
+           RED / BLUE ARMOR GLOW
+        ========================================== */
+
+        body::after {
+
+            content: "";
+
+            position: fixed;
+
+            width: 500px;
+            height: 500px;
+
+            left: 50%;
+            top: 48%;
+
+            transform: translate(-50%, -50%);
+
+            border-radius: 50%;
+
+            background:
+
+                conic-gradient(
+                    from 0deg,
+                    rgba(226,27,45,0.05),
+                    rgba(7,86,168,0.08),
+                    rgba(226,27,45,0.05),
+                    rgba(7,86,168,0.08)
+                );
+
+            filter: blur(50px);
+
+            pointer-events: none;
+
+            animation:
+                backgroundPulse 5s ease-in-out infinite;
+
+        }
+
+
+        /* ==========================================
+           APP
+        ========================================== */
 
         .app {
+
             min-height: 100vh;
+
             display: flex;
+
             flex-direction: column;
+
             align-items: center;
-            padding: 28px 20px;
+
+            padding:
+                25px
+                20px
+                18px;
+
+            position: relative;
+
+            z-index: 2;
+
         }
 
-        /* Header */
+
+        /* ==========================================
+           HEADER
+        ========================================== */
+
         .header {
+
             width: 100%;
-            max-width: 700px;
+
+            max-width: 720px;
+
             display: flex;
+
             justify-content: space-between;
+
             align-items: center;
-            animation: fadeDown 1s ease;
+
+            animation:
+                fadeDown 0.8s ease;
+
         }
+
 
         .brand {
-            letter-spacing: 7px;
-            font-size: 24px;
-            font-weight: 700;
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 3px;
+
         }
+
+
+        .brand-main {
+
+            font-size: 25px;
+
+            font-weight: 800;
+
+            letter-spacing: 8px;
+
+            background:
+
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    var(--gold-bright),
+                    #ffffff
+                );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color:
+                transparent;
+
+            text-shadow:
+                0 0 18px
+                rgba(255,216,102,0.18);
+
+        }
+
+
+        .brand-sub {
+
+            font-size: 7px;
+
+            letter-spacing: 4px;
+
+            color:
+                rgba(255,255,255,0.45);
+
+        }
+
 
         .status {
+
             display: flex;
+
             align-items: center;
+
             gap: 8px;
-            font-size: 11px;
+
+            font-size: 9px;
+
             letter-spacing: 2px;
-            opacity: 0.7;
+
+            color:
+                rgba(255,255,255,0.65);
+
         }
+
 
         .status-dot {
+
             width: 7px;
+
             height: 7px;
+
             border-radius: 50%;
-            background: #67e8ff;
-            box-shadow: 0 0 12px #67e8ff;
-            animation: blink 2s infinite;
+
+            background: #3cff9a;
+
+            box-shadow:
+                0 0 8px #3cff9a,
+                0 0 18px rgba(60,255,154,0.6);
+
+            animation:
+                statusBlink 2s infinite;
+
         }
 
-        /* Main */
+
+        /* ==========================================
+           MAIN
+        ========================================== */
+
         .main {
+
             flex: 1;
+
             width: 100%;
+
             display: flex;
+
             flex-direction: column;
+
             align-items: center;
+
             justify-content: center;
+
         }
+
+
+        /* ==========================================
+           GREETING
+        ========================================== */
 
         .greeting {
+
+            width: min(90%, 650px);
+
             text-align: center;
-            margin-bottom: 42px;
-            animation: fadeUp 1s ease;
+
+            margin-bottom: 25px;
+
+            animation:
+                fadeUp 0.9s ease;
+
         }
+
 
         .greeting h1 {
-            font-size: clamp(28px, 8vw, 52px);
-            letter-spacing: 4px;
+
+            font-size:
+                clamp(25px, 7vw, 48px);
+
             font-weight: 300;
+
+            letter-spacing: 3px;
+
+            color: #ffffff;
+
+            text-shadow:
+                0 0 20px
+                rgba(255,255,255,0.12);
+
         }
+
 
         .greeting p {
-            margin-top: 10px;
-            font-size: 12px;
+
+            margin-top: 9px;
+
+            min-height: 18px;
+
+            font-size: 10px;
+
             letter-spacing: 3px;
-            opacity: 0.5;
+
+            color:
+                rgba(255,255,255,0.52);
+
+            transition:
+                color 0.3s ease,
+                text-shadow 0.3s ease;
+
         }
 
-        /* EDITH Core */
-        .core-container {
+
+        /* ==========================================
+           REACTOR SYSTEM
+        ========================================== */
+
+        .reactor-container {
+
             position: relative;
-            width: 230px;
-            height: 230px;
+
+            width: 275px;
+            height: 275px;
+
             display: flex;
+
             align-items: center;
             justify-content: center;
-            margin-bottom: 48px;
+
+            margin-bottom: 22px;
+
         }
 
-        .core {
-            width: 105px;
-            height: 105px;
-            border-radius: 50%;
-            background:
-                radial-gradient(circle,
-                    #e8fbff 0%,
-                    #73e8ff 15%,
-                    #238fb8 38%,
-                    #092b40 68%,
-                    transparent 72%);
-            box-shadow:
-                0 0 25px #55dfff,
-                0 0 60px rgba(50, 210, 255, 0.55),
-                0 0 110px rgba(30, 170, 255, 0.25);
-            animation: breathe 3s ease-in-out infinite;
-            z-index: 3;
-        }
 
-        .ring {
+        /* Outer blue energy field */
+
+        .reactor-field {
+
             position: absolute;
-            border: 1px solid rgba(100, 225, 255, 0.45);
+
+            width: 270px;
+            height: 270px;
+
             border-radius: 50%;
+
+            background:
+
+                conic-gradient(
+                    from 0deg,
+                    transparent 0deg,
+                    rgba(22,140,255,0.4) 45deg,
+                    transparent 85deg,
+                    rgba(226,27,45,0.3) 135deg,
+                    transparent 180deg,
+                    rgba(22,140,255,0.4) 225deg,
+                    transparent 270deg,
+                    rgba(226,27,45,0.3) 315deg,
+                    transparent 360deg
+                );
+
+            filter:
+                blur(3px);
+
+            opacity: 0.7;
+
+            animation:
+                reactorRotate 14s linear infinite;
+
         }
 
-        .ring.one {
-            width: 145px;
-            height: 145px;
-            animation: spin 8s linear infinite;
+
+        /* Outer armor ring */
+
+        .armor-ring {
+
+            position: absolute;
+
+            width: 245px;
+            height: 245px;
+
+            border-radius: 50%;
+
+            border:
+
+                2px solid
+                rgba(217,166,46,0.65);
+
+            box-shadow:
+
+                0 0 8px
+                rgba(217,166,46,0.25),
+
+                inset 0 0 12px
+                rgba(217,166,46,0.12);
+
+            animation:
+                armorPulse 3s ease-in-out infinite;
+
         }
 
-        .ring.two {
-            width: 190px;
-            height: 190px;
-            border-style: dashed;
-            animation: spinReverse 13s linear infinite;
-        }
 
-        .ring.three {
+        /* Red segmented ring */
+
+        .red-ring {
+
+            position: absolute;
+
             width: 225px;
             height: 225px;
-            border-color: rgba(100, 225, 255, 0.15);
-            animation: pulseRing 3s ease-in-out infinite;
+
+            border-radius: 50%;
+
+            border:
+
+                5px dotted
+                rgba(226,27,45,0.7);
+
+            transform:
+                rotate(18deg);
+
+            box-shadow:
+
+                0 0 12px
+                rgba(226,27,45,0.25);
+
+            animation:
+                reactorRotateReverse 9s linear infinite;
+
         }
 
-        /* Decorative orbit dots */
-        .orbit-dot {
+
+        /* Blue segmented ring */
+
+        .blue-ring {
+
             position: absolute;
-            width: 5px;
-            height: 5px;
+
+            width: 205px;
+            height: 205px;
+
             border-radius: 50%;
-            background: #8cefff;
-            box-shadow: 0 0 12px #5ce5ff;
+
+            border:
+
+                2px dashed
+                rgba(22,140,255,0.75);
+
+            animation:
+                reactorRotate 7s linear infinite;
+
         }
 
-        .dot-a {
-            top: 12px;
-            left: 70px;
+
+        /* Inner gold ring */
+
+        .gold-ring {
+
+            position: absolute;
+
+            width: 178px;
+            height: 178px;
+
+            border-radius: 50%;
+
+            border:
+
+                3px solid
+                rgba(255,216,102,0.75);
+
+            box-shadow:
+
+                0 0 10px
+                rgba(255,216,102,0.25),
+
+                inset 0 0 12px
+                rgba(255,216,102,0.12);
+
         }
 
-        .dot-b {
-            right: 8px;
-            top: 105px;
+
+        /* ==========================================
+           ARC REACTOR CORE
+        ========================================== */
+
+        .reactor-core {
+
+            position: relative;
+
+            width: 142px;
+            height: 142px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background:
+
+                radial-gradient(
+                    circle,
+                    #ffffff 0%,
+                    #d7fbff 7%,
+                    #4edcff 20%,
+                    #1179bb 38%,
+                    #082641 58%,
+                    #050a12 72%
+                );
+
+            border:
+
+                5px solid
+                rgba(205,216,225,0.65);
+
+            box-shadow:
+
+                0 0 12px
+                rgba(70,220,255,0.9),
+
+                0 0 30px
+                rgba(22,140,255,0.7),
+
+                0 0 65px
+                rgba(22,140,255,0.4);
+
+            animation:
+                coreBreathe 3s ease-in-out infinite;
+
+            z-index: 5;
+
         }
 
-        .dot-c {
-            bottom: 18px;
-            left: 52px;
+
+        /* Inner triangular energy geometry */
+
+        .core-triangle {
+
+            position: absolute;
+
+            width: 78px;
+            height: 78px;
+
+            border:
+
+                3px solid
+                rgba(215,250,255,0.95);
+
+            clip-path:
+                polygon(
+                    50% 0%,
+                    100% 100%,
+                    0% 100%
+                );
+
+            transform:
+                rotate(180deg);
+
+            filter:
+
+                drop-shadow(
+                    0 0 7px
+                    #65e8ff
+                );
+
+            animation:
+                trianglePulse 2s ease-in-out infinite;
+
         }
 
-        /* Button */
+
+        .core-inner {
+
+            width: 42px;
+            height: 42px;
+
+            border-radius: 50%;
+
+            background:
+
+                radial-gradient(
+                    circle,
+                    #ffffff 0%,
+                    #dfffff 20%,
+                    #6cecff 48%,
+                    #0e86c4 70%,
+                    transparent 72%
+                );
+
+            box-shadow:
+
+                0 0 15px #ffffff,
+                0 0 35px #5ee8ff,
+                0 0 60px
+                rgba(22,140,255,0.9);
+
+            z-index: 7;
+
+        }
+
+
+        /* ==========================================
+           REACTOR ACTIVE STATE
+        ========================================== */
+
+        .reactor-container.active
+        .reactor-core {
+
+            animation:
+                reactorIgnite 0.8s ease-out,
+                coreBreathe 3s ease-in-out 0.8s infinite;
+
+            box-shadow:
+
+                0 0 20px #ffffff,
+                0 0 45px #58e8ff,
+                0 0 90px #168cff,
+                0 0 140px
+                rgba(22,140,255,0.7);
+
+        }
+
+
+        .reactor-container.active
+        .reactor-field {
+
+            opacity: 1;
+
+            filter:
+                blur(1px);
+
+            animation:
+                reactorRotate 2s linear infinite;
+
+        }
+
+
+        .reactor-container.active
+        .armor-ring {
+
+            border-color:
+                var(--gold-bright);
+
+            box-shadow:
+
+                0 0 18px
+                rgba(255,216,102,0.7),
+
+                inset 0 0 20px
+                rgba(255,216,102,0.3);
+
+        }
+
+
+        .reactor-container.active
+        .red-ring {
+
+            border-color:
+                var(--red-bright);
+
+            box-shadow:
+
+                0 0 25px
+                rgba(255,51,72,0.8);
+
+        }
+
+
+        .reactor-container.active
+        .blue-ring {
+
+            border-color:
+                var(--blue-bright);
+
+            box-shadow:
+
+                0 0 25px
+                rgba(22,140,255,0.8);
+
+        }
+
+
+        /* ==========================================
+           ENERGY PARTICLES
+        ========================================== */
+
+        .particle {
+
+            position: absolute;
+
+            width: 4px;
+            height: 4px;
+
+            border-radius: 50%;
+
+            background:
+                #ffffff;
+
+            box-shadow:
+                0 0 10px #54e5ff;
+
+        }
+
+
+        .particle.one {
+
+            top: 28px;
+            left: 72px;
+
+            animation:
+                particleFloat 3s infinite;
+
+        }
+
+
+        .particle.two {
+
+            right: 32px;
+            top: 110px;
+
+            animation:
+                particleFloat 4s infinite 0.5s;
+
+        }
+
+
+        .particle.three {
+
+            bottom: 38px;
+            left: 82px;
+
+            animation:
+                particleFloat 3.5s infinite 1s;
+
+        }
+
+
+        .particle.four {
+
+            left: 35px;
+            top: 145px;
+
+            animation:
+                particleFloat 4.5s infinite 1.5s;
+
+        }
+
+
+        /* ==========================================
+           LISTEN BUTTON
+        ========================================== */
+
         .listen-button {
-            width: 82px;
-            height: 82px;
-            border: 1px solid rgba(120, 230, 255, 0.5);
+
+            position: relative;
+
+            width: 92px;
+            height: 92px;
+
             border-radius: 50%;
-            background: rgba(20, 70, 95, 0.3);
-            color: #c9f7ff;
+
+            border:
+
+                1px solid
+                rgba(255,255,255,0.35);
+
+            background:
+
+                radial-gradient(
+                    circle at 35% 30%,
+                    rgba(226,27,45,0.35),
+                    rgba(8,16,29,0.95) 65%
+                );
+
+            color: #ffffff;
+
             font-size: 10px;
+
             letter-spacing: 2px;
+
             cursor: pointer;
-            box-shadow: 0 0 25px rgba(60, 210, 255, 0.12);
-            transition: 0.3s ease;
+
+            box-shadow:
+
+                0 0 18px
+                rgba(226,27,45,0.15),
+
+                inset 0 0 20px
+                rgba(7,86,168,0.15);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+
+            overflow: hidden;
+
         }
+
+
+        .listen-button::before {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 5px;
+
+            border-radius: 50%;
+
+            border:
+                1px solid
+                rgba(22,140,255,0.5);
+
+        }
+
+
+        .listen-button::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 100%;
+            height: 2px;
+
+            left: 0;
+            top: 50%;
+
+            background:
+
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255,51,72,0.7),
+                    transparent
+                );
+
+            animation:
+                buttonScan 2.5s linear infinite;
+
+        }
+
 
         .listen-button:hover {
-            transform: scale(1.07);
+
+            transform:
+                scale(1.06);
+
+            border-color:
+                rgba(255,216,102,0.8);
+
             box-shadow:
-                0 0 30px rgba(60, 210, 255, 0.35),
-                inset 0 0 20px rgba(60, 210, 255, 0.1);
+
+                0 0 25px
+                rgba(226,27,45,0.35),
+
+                0 0 45px
+                rgba(22,140,255,0.2),
+
+                inset 0 0 25px
+                rgba(7,86,168,0.2);
+
         }
+
 
         .listen-button:active {
-            transform: scale(0.94);
+
+            transform:
+                scale(0.92);
+
         }
 
-        /* Footer */
+
+        .listen-button.active {
+
+            border-color:
+                #ffffff;
+
+            box-shadow:
+
+                0 0 20px
+                #ff3348,
+
+                0 0 45px
+                #168cff,
+
+                inset 0 0 25px
+                rgba(255,255,255,0.18);
+
+        }
+
+
+        /* ==========================================
+           FOOTER
+        ========================================== */
+
         .footer {
-            font-size: 9px;
-            letter-spacing: 2px;
-            opacity: 0.25;
-            padding-top: 20px;
+
+            font-size: 7px;
+
+            letter-spacing: 3px;
+
+            color:
+                rgba(255,255,255,0.25);
+
+            padding-top: 8px;
+
         }
 
-        /* Animations */
-        @keyframes breathe {
+
+        /* ==========================================
+           ANIMATIONS
+        ========================================== */
+
+        @keyframes coreBreathe {
+
             0%, 100% {
-                transform: scale(0.92);
+                transform: scale(0.96);
             }
-            50% {
-                transform: scale(1.08);
-            }
-        }
 
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes spinReverse {
-            from { transform: rotate(360deg); }
-            to { transform: rotate(0deg); }
-        }
-
-        @keyframes pulseRing {
-            0%, 100% {
-                transform: scale(0.94);
-                opacity: 0.35;
-            }
             50% {
                 transform: scale(1.04);
-                opacity: 0.7;
             }
+
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.25; }
+
+        @keyframes reactorIgnite {
+
+            0% {
+                transform: scale(1);
+            }
+
+            35% {
+                transform: scale(1.22);
+            }
+
+            65% {
+                transform: scale(1.08);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+
         }
 
-        @keyframes fadeDown {
-            from {
-                opacity: 0;
-                transform: translateY(-15px);
+
+        @keyframes trianglePulse {
+
+            0%, 100% {
+                opacity: 0.65;
+                transform:
+                    rotate(180deg)
+                    scale(0.95);
             }
-            to {
+
+            50% {
                 opacity: 1;
-                transform: translateY(0);
+                transform:
+                    rotate(180deg)
+                    scale(1.08);
             }
+
         }
 
-        @keyframes fadeUp {
+
+        @keyframes reactorRotate {
+
             from {
-                opacity: 0;
-                transform: translateY(15px);
+                transform: rotate(0deg);
             }
+
             to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+
+        @keyframes reactorRotateReverse {
+
+            from {
+                transform: rotate(360deg);
+            }
+
+            to {
+                transform: rotate(0deg);
+            }
+
+        }
+
+
+        @keyframes armorPulse {
+
+            0%, 100% {
+                opacity: 0.65;
+            }
+
+            50% {
                 opacity: 1;
-                transform: translateY(0);
             }
+
         }
 
-        @media (max-width: 400px) {
-            .app {
-                padding: 22px 16px;
+
+        @keyframes particleFloat {
+
+            0%, 100% {
+                transform:
+                    translateY(0)
+                    scale(0.7);
+
+                opacity: 0.3;
             }
 
-            .core-container {
-                transform: scale(0.9);
-                margin-bottom: 32px;
+            50% {
+                transform:
+                    translateY(-12px)
+                    scale(1.3);
+
+                opacity: 1;
             }
+
         }
-    </style>
-</head>
 
-<body>
 
-    <div class="app">
+        @keyframes buttonScan {
 
-        <header class="header">
-            <div class="brand">EDITH</div>
-
-            <div class="status">
-                <span class="status-dot"></span>
-                ONLINE
-            </div>
-        </header>
-
-        <main class="main">
-
-            <div class="greeting">
-                <h1>Good evening.</h1>
-                <p>HOW CAN I ASSIST YOU?</p>
-            </div>
-
-            <div class="core-container">
-                <div class="ring one"></div>
-                <div class="ring two"></div>
-                <div class="ring three"></div>
-
-                <div class="orbit-dot dot-a"></div>
-                <div class="orbit-dot dot-b"></div>
-                <div class="orbit-dot dot-c"></div>
-
-                <div class="core"></div>
-            </div>
-
-            <button class="listen-button">
-                LISTEN
-            </button>
-
-        </main>
-
-        <footer class="footer">
-            EDITH • PERSONAL AI SYSTEM
-        </footer>
-
-    </div>
-<script>
-    const listenButton = document.querySelector(".listen-button");
-    const greeting = document.querySelector(".greeting p");
-
-    let conversationHistory = [];
-    const BACKEND_URL =
-        "https://script.google.com/macros/s/AKfycbweIO7Yd7C5CDaym0vZYTY230AyH2HYlbr60Cl_ibl2GjYu8RcW9hjwtBnTDFHZwPWCeQ/exec";
-
-    const SpeechRecognition =
-        window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    if (SpeechRecognition) {
-
-        const recognition = new SpeechRecognition();
-
-        recognition.lang = "en-US";
-        recognition.continuous = false;
-        recognition.interimResults = false;
-
-        listenButton.addEventListener("click", () => {
-            greeting.textContent = "LISTENING...";
-            listenButton.textContent = "LISTENING";
-
-            try {
-                recognition.start();
-            } catch (error) {
-                console.log(error);
+            from {
+                transform:
+                    translateY(-45px);
             }
-        });
 
-        recognition.onresult = async (event) => {
-
-            const text = event.results[0][0].transcript;
-
-const command = text.toLowerCase().trim();
-
-
-
-
-
-
-
-
-
-            greeting.textContent = "THINKING...";
-            listenButton.textContent = "THINKING";
-
-            try {
-
-                const response = await fetch(BACKEND_URL, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "text/plain;charset=utf-8"
-                    },
-                   body: JSON.stringify({
-    text: text,
-    history: conversationHistory
-})
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-            conversationHistory.push({
-    user: text,
-    assistant: data.reply
-});
-                    greeting.textContent = data.reply;
-                    listenButton.textContent = "LISTEN";
-
-                    const speech = new SpeechSynthesisUtterance(data.reply);
-                    speech.lang = "en-US";
-                    speech.rate = 1;
-                    speech.pitch = 1;
-
-                    window.speechSynthesis.cancel();
-                    window.speechSynthesis.speak(speech);
-
-                } else {
-
-                    greeting.textContent = data.error || "EDITH ERROR";
-                    listenButton.textContent = "LISTEN";
-                    console.log(data.error);
-
-                }
-
-            } catch (error) {
-
-                greeting.textContent = "CONNECTION ERROR";
-                listenButton.textContent = "LISTEN";
-                console.log(error);
-
+            to {
+                transform:
+                    translateY(45px);
             }
-        };
 
-        recognition.onerror = () => {
-            greeting.textContent = "VOICE INPUT FAILED";
-            listenButton.textContent = "LISTEN";
-        };
+        }
 
-        recognition.onend = () => {
-            if (listenButton.textContent === "LISTENING") {
-                listenButton.textContent = "LISTEN";
+
+        @keyframes statusBlink {
+
+            0%, 100% {
+                opacity: 1;
             }
-        };
 
-    } else {
+            50% {
+                opacity: 0.3;
+            }
 
-        greeting.textContent = "VOICE INPUT NOT SUPPORTED";
+        }
 
-    }
-</script>
-</body>
-</html>
+
+        @keyframes backgroundPulse {
+
+            0%, 100% {
+                opacity: 0.5;
+                transform:
+                    translate(-50%, -50%)
+                    scale(0.9);
+            }
+
+ 

@@ -1130,4 +1130,604 @@
                     scale(0.9);
             }
 
- 
+            50% {
+                opacity: 0.9;
+                transform:
+                    translate(-50%, -50%)
+                    scale(1.1);
+            }
+
+        }
+
+
+        @keyframes fadeDown {
+
+            from {
+                opacity: 0;
+                transform:
+                    translateY(-15px);
+            }
+
+            to {
+                opacity: 1;
+                transform:
+                    translateY(0);
+            }
+
+        }
+
+
+        @keyframes fadeUp {
+
+            from {
+                opacity: 0;
+                transform:
+                    translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform:
+                    translateY(0);
+            }
+
+        }
+
+
+        /* ==========================================
+           MOBILE
+        ========================================== */
+
+        @media (max-width: 420px) {
+
+            .app {
+
+                padding:
+                    20px
+                    14px
+                    14px;
+
+            }
+
+
+            .brand-main {
+
+                font-size: 21px;
+
+                letter-spacing: 6px;
+
+            }
+
+
+            .reactor-container {
+
+                transform:
+                    scale(0.86);
+
+                margin-top: -8px;
+
+                margin-bottom: 2px;
+
+            }
+
+
+            .greeting {
+
+                margin-bottom: 2px;
+
+            }
+
+
+            .greeting h1 {
+
+                font-size: 27px;
+
+            }
+
+
+            .listen-button {
+
+                width: 84px;
+                height: 84px;
+
+            }
+
+        }
+
+
+        @media (max-height: 650px) {
+
+            .reactor-container {
+
+                transform:
+                    scale(0.72);
+
+                margin-top: -30px;
+
+                margin-bottom: -35px;
+
+            }
+
+
+            .greeting {
+
+                margin-bottom: 0;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="app">
+
+
+        <!-- =====================================
+             HEADER
+        ====================================== -->
+
+        <header class="header">
+
+            <div class="brand">
+
+                <div class="brand-main">
+                    EDITH
+                </div>
+
+                <div class="brand-sub">
+                    PERSONAL AI SYSTEM
+                </div>
+
+            </div>
+
+
+            <div class="status">
+
+                <span class="status-dot"></span>
+
+                ONLINE
+
+            </div>
+
+        </header>
+
+
+        <!-- =====================================
+             MAIN
+        ====================================== -->
+
+        <main class="main">
+
+
+            <div class="greeting">
+
+                <h1>
+                    Good evening.
+                </h1>
+
+                <p>
+                    HOW CAN I ASSIST YOU?
+                </p>
+
+            </div>
+
+
+            <!-- =================================
+                 REACTOR
+            ================================== -->
+
+            <div
+                class="reactor-container"
+                id="reactor"
+            >
+
+                <div class="reactor-field"></div>
+
+                <div class="armor-ring"></div>
+
+                <div class="red-ring"></div>
+
+                <div class="blue-ring"></div>
+
+                <div class="gold-ring"></div>
+
+
+                <div class="particle one"></div>
+
+                <div class="particle two"></div>
+
+                <div class="particle three"></div>
+
+                <div class="particle four"></div>
+
+
+                <div class="reactor-core">
+
+                    <div class="core-triangle"></div>
+
+                    <div class="core-inner"></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================
+                 LISTEN
+            ================================== -->
+
+            <button
+                class="listen-button"
+                id="listenButton"
+            >
+                LISTEN
+            </button>
+
+
+        </main>
+
+
+        <footer class="footer">
+
+            EDITH • AI CORE ONLINE
+
+        </footer>
+
+
+    </div>
+
+
+
+    <!-- =========================================
+         EDITH VOICE SYSTEM
+    ========================================== -->
+
+    <script>
+
+
+        const listenButton =
+            document.querySelector(
+                ".listen-button"
+            );
+
+
+        const greeting =
+            document.querySelector(
+                ".greeting p"
+            );
+
+
+        const reactor =
+            document.querySelector(
+                "#reactor"
+            );
+
+
+        let conversationHistory = [];
+
+
+        const BACKEND_URL =
+            "https://script.google.com/macros/s/AKfycbweIO7Yd7C5CDaym0vZYTY230AyH2HYlbr60Cl_ibl2GjYu8RcW9hjwtBnTDFHZwPWCeQ/exec";
+
+
+        const SpeechRecognition =
+            window.SpeechRecognition ||
+            window.webkitSpeechRecognition;
+
+
+        if (SpeechRecognition) {
+
+
+            const recognition =
+                new SpeechRecognition();
+
+
+            recognition.lang =
+                "en-US";
+
+
+            recognition.continuous =
+                false;
+
+
+            recognition.interimResults =
+                false;
+
+
+
+            /* =================================
+               LISTEN BUTTON
+            ================================= */
+
+            listenButton.addEventListener(
+                "click",
+                () => {
+
+
+                    /* Reactor ignition */
+
+                    reactor.classList.add(
+                        "active"
+                    );
+
+
+                    listenButton.classList.add(
+                        "active"
+                    );
+
+
+                    greeting.textContent =
+                        "LISTENING...";
+
+
+                    greeting.style.color =
+                        "#8fefff";
+
+
+                    greeting.style.textShadow =
+                        "0 0 15px rgba(22,140,255,0.8)";
+
+
+                    listenButton.textContent =
+                        "LISTENING";
+
+
+                    try {
+
+                        recognition.start();
+
+                    }
+
+                    catch (error) {
+
+                        console.log(error);
+
+                    }
+
+                }
+            );
+
+
+
+            /* =================================
+               SPEECH RESULT
+            ================================= */
+
+            recognition.onresult =
+                async (event) => {
+
+
+                    const text =
+                        event
+                            .results[0][0]
+                            .transcript;
+
+
+                    greeting.textContent =
+                        "THINKING...";
+
+
+                    listenButton.textContent =
+                        "THINKING";
+
+
+                    try {
+
+
+                        const response =
+                            await fetch(
+                                BACKEND_URL,
+                                {
+
+                                    method:
+                                        "POST",
+
+                                    headers: {
+
+                                        "Content-Type":
+                                            "text/plain;charset=utf-8"
+
+                                    },
+
+                                    body:
+                                        JSON.stringify({
+
+                                            text:
+                                                text,
+
+                                            history:
+                                                conversationHistory
+
+                                        })
+
+                                }
+                            );
+
+
+                        const data =
+                            await response.json();
+
+
+                        if (data.success) {
+
+
+                            conversationHistory.push({
+
+                                user:
+                                    text,
+
+                                assistant:
+                                    data.reply
+
+                            });
+
+
+                            greeting.textContent =
+                                data.reply;
+
+
+                            listenButton.textContent =
+                                "LISTEN";
+
+
+                            greeting.style.color =
+                                "rgba(255,255,255,0.52)";
+
+
+                            greeting.style.textShadow =
+                                "none";
+
+
+                            const speech =
+                                new SpeechSynthesisUtterance(
+                                    data.reply
+                                );
+
+
+                            speech.lang =
+                                "en-US";
+
+
+                            speech.rate =
+                                1;
+
+
+                            speech.pitch =
+                                1;
+
+
+                            window.speechSynthesis.cancel();
+
+
+                            window.speechSynthesis.speak(
+                                speech
+                            );
+
+
+                        }
+
+                        else {
+
+
+                            greeting.textContent =
+                                data.error ||
+                                "EDITH ERROR";
+
+
+                            listenButton.textContent =
+                                "LISTEN";
+
+
+                            console.log(
+                                data.error
+                            );
+
+                        }
+
+
+                    }
+
+                    catch (error) {
+
+
+                        greeting.textContent =
+                            "CONNECTION ERROR";
+
+
+                        listenButton.textContent =
+                            "LISTEN";
+
+
+                        console.log(error);
+
+                    }
+
+                };
+
+
+
+            /* =================================
+               VOICE ERROR
+            ================================= */
+
+            recognition.onerror =
+                () => {
+
+
+                    greeting.textContent =
+                        "VOICE INPUT FAILED";
+
+
+                    listenButton.textContent =
+                        "LISTEN";
+
+
+                    reactor.classList.remove(
+                        "active"
+                    );
+
+
+                    listenButton.classList.remove(
+                        "active"
+                    );
+
+                };
+
+
+
+            /* =================================
+               VOICE END
+            ================================= */
+
+            recognition.onend =
+                () => {
+
+
+                    reactor.classList.remove(
+                        "active"
+                    );
+
+
+                    listenButton.classList.remove(
+                        "active"
+                    );
+
+
+                    if (
+                        listenButton.textContent ===
+                        "LISTENING"
+                    ) {
+
+                        listenButton.textContent =
+                            "LISTEN";
+
+                    }
+
+                };
+
+
+        }
+
+
+        else {
+
+
+            greeting.textContent =
+                "VOICE INPUT NOT SUPPORTED";
+
+
+        }
+
+
+    </script>
+
+
+</body>
+
+</html>
